@@ -1,0 +1,11 @@
+#!/bin/bash
+#PBS -q normal
+#PBS -N serial_job
+#PBS -l select=1:ncpus=1:mem=1gb
+#PBS -l walltime=00:10:00
+#PBS -j oe
+#PBS -P personal-a1000645
+
+echo "Print Hostname"
+hostname
+

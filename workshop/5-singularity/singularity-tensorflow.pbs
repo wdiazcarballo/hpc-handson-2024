@@ -1,0 +1,33 @@
+#!/bin/sh
+#PBS -N Tensorflow
+#PBS -l select=1:ngpus=1
+#PBS -q ai
+#PBS -l walltime=1:00:00
+#PBS -j oe
+#PBS -o log
+## change next line to correct project code:
+#PBS -P <ProjectId>
+
+# Enter the folder where the job script located, if failed, then return the error code.
+cd $PBS_O_WORKDIR || exit $?
+
+# If no log folder, then create one
+[ -d log ] || mkdir log
+
+# Load container environment
+module load singularity
+# configure the mount point in the singularity image
+export SINGULARITY_BIND="/scratch:/scratch,/home/project:/data/projects"
+
+echo Method 1: define the image, and run it with python script.
+image=/app/apps/containers/tensorflow/tensorflow-nvidia-22.04-tf2-py3.sif
+singularity exec --nv $image python hello.py
+
+echo
+echo Method 2: start a shell and pass the python command on the standard input
+singularity exec --nv $image /bin/bash << EOF
+whoami
+pwd
+nvidia-smi
+python hello.py
+EOF
