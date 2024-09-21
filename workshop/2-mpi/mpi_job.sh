@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -p normal                # Partition (queue) name
+#SBATCH -p compute                # Partition (queue) name
 #SBATCH -N 1                     # Number of nodes
 #SBATCH --ntasks=64              # Total number of tasks (MPI processes)
 #SBATCH --cpus-per-task=1        # Number of OpenMP threads per MPI process
@@ -8,8 +8,8 @@
 #SBATCH -A cb900901              # Project account
 
 # Load necessary modules
-module purge
-module load cray-mpich
+module restore
+#module load cray-mpich
 
 # Print the hostname of the node
 echo "Print Hostname"
@@ -30,4 +30,4 @@ echo "The job $SLURM_JOB_NAME is running on $SLURM_JOB_NODELIST."
 cc --version
 
 # Run the MPI program
-srun ./mpihello
+srun -c ${SLURM_CPU_PER_TASK} ./mpihello
